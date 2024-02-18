@@ -31,6 +31,9 @@
 ;; Rather than fixing url.el, we just work around the problem here
 ;; instead!
 
+;; Thanks to Adam Porter for the solid networking package without
+;; which this annoyance would plague humanity till the end of time!
+
 ;;; Todo:
 
 ;; - Setup a global minor mode instead that will setup the hacks.
