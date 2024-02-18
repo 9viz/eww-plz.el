@@ -82,7 +82,7 @@ It returns the redirection status, if any."
 
 (defun eww-plz--headers ()
   "Return the headers to use for the plz requests."
-  `(("Accept" . ,eww-accept-content-types)
+  `(("Accept" . "text/html, text/plain, text/sgml, text/css, application/xhtml+xml, image/png, */*;q=0.01")
     ("User-Agent" . ,(url-http--user-agent-default-string))
     ,(when (and (fboundp 'zlib-available-p)
                 (zlib-available-p))
