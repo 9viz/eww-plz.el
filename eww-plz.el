@@ -134,7 +134,7 @@ It returns the redirection status, if any."
             (shr-image-blocked-p url)
             (url-is-cached url))
         (shr-tag-img dom url)
-      ;; Create the queue here too, if not already alive.  It might be
+      ;; Create the queue here too, if not already alive.  It might
       ;; help in replacing `shr-tag-img' globally.
       (unless (plz-queue-p eww-plz-img-queue)
         (setq-local eww-plz-img-queue (make-plz-queue :limit eww-plz-img-queue-limit)))
