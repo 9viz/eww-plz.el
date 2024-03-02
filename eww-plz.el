@@ -73,7 +73,7 @@ It returns the redirection status, if any."
     (save-excursion
       (save-restriction
         (narrow-to-region (point-min) url-http-end-of-headers)
-        (when (= (/ (url-http-parse-response) 100) 3)
+        (while (= (/ (url-http-parse-response) 100) 3)
           (let ((headers (eww-parse-headers)))
             (delete-region (point-min) (point))
             (and (assoc-default "location" headers)
