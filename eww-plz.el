@@ -41,6 +41,7 @@
 ;;; Code:
 (require 'plz)
 (require 'url-http)
+(require 'dom)
 
 (defvar eww-plz-curl-args
   ;; --compressed is too risky of a flag since curl behaves strictly
