@@ -41,7 +41,6 @@
 ;;; Code:
 (require 'plz)
 (require 'url-http)
-(require 'dom)
 
 (defvar eww-plz-curl-args
   ;; --compressed is too risky of a flag since curl behaves strictly
@@ -124,6 +123,8 @@ It returns the redirection status, if any."
 
 (defun eww-plz-tag-img (dom &optional url)
   "Replacement for `shr-tag-img', which see."
+  (require 'dom)
+  (require 'shr)
   (let ((alt (dom-attr dom 'alt))
         (width (shr-string-number (dom-attr dom 'width)))
         (height (shr-string-number (dom-attr dom 'height)))
