@@ -119,7 +119,13 @@ It returns the redirection status, if any."
                                           (car (plz-error-curl-error error))
                                           (cdr (plz-error-curl-error error))))))
                 (apply callback nil cbargs))))))
-(advice-add 'eww-retrieve :override #'eww-plz-retrieve)
+
+(defun eww-plz-retrieve-advice (oldfun &rest args)
+  (if (string-match-p "\\`https?://" (car args))
+      (apply #'eww-plz-retrieve args)
+    (apply oldfun args)))
+
+(advice-add 'eww-retrieve :around #'eww-plz-retrieve-advice)
 
 (defun eww-plz-tag-img (dom &optional url)
   "Replacement for `shr-tag-img', which see."
@@ -134,8 +140,9 @@ It returns the redirection status, if any."
             (null url)
             (member (dom-attr dom 'height) '("0" "1"))
             (member (dom-attr dom 'width) '("0" "1"))
-            (string-match "\\`data:" url)
-            (string-match "\\`cid:" url)
+            (string-prefix-p "data:" url)
+            (string-prefix-p "cid:" url)
+            (string-prefix-p "file:" url)
             (shr-image-blocked-p url)
             (url-is-cached url))
         (shr-tag-img dom url)
@@ -184,6 +191,9 @@ It returns the redirection status, if any."
 
 (defun eww-plz--hook ()
   "Setup the image tag routines to use the plz backed ones."
+  ;; TODO: This can break user customisation for table rendering code
+  ;; because of bad interaction between let-binding and buffer-local
+  ;; binding.  Best to set it globally.
   (setq-local shr-external-rendering-functions
               (cons (cons 'img #'eww-plz-tag-img)
                     shr-external-rendering-functions))
