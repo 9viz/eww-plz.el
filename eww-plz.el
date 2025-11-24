@@ -105,6 +105,7 @@ It returns the redirection status, if any."
       :else (lambda (error)
               (with-current-buffer (get-buffer-create " *eww-plz-error*")
                 (erase-buffer)
+                (insert "HTTP/1.1 200 OK\n") ; TODO: Use approriate error code.
                 (if (plz-error-response error)
                     (progn
                       (pcase-dolist (`(,header . ,field) (plz-response-headers (plz-error-response error)))
@@ -118,7 +119,9 @@ It returns the redirection status, if any."
                                   (format "Curl error: %d %s"
                                           (car (plz-error-curl-error error))
                                           (cdr (plz-error-curl-error error))))))
-                (apply callback nil cbargs))))))
+                (search-backward "\n\n")
+                (forward-char 2)
+                (apply callback (vz/eww-plz--setup-req-buf url) cbargs))))))
 
 (defun eww-plz-retrieve-advice (oldfun &rest args)
   (if (string-match-p "\\`https?://" (car args))
